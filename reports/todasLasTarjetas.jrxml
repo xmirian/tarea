@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="todasLasTarjetas" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b9182762-ef09-4368-a175-98f0d2f8c1bd">
+	<property name="ireport.zoom" value="1.3310000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idActividad" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select t.numTarjeta, colaborador,montoPagado,nota,estado,
+a.nombre as actividad,r.nombre as repartidor
+from tarjeta t
+inner join actividad a on a.idActividad = t.id_actividad
+inner join repartidor r on r.idRepartidor = t.id_repartidor 
+where t.id_actividad = $P{idActividad}
+order by t.numTarjeta asc]]>
+	</queryString>
+	<field name="numTarjeta" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="colaborador" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="montoPagado" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nota" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="estado" class="java.lang.String">
+		<fieldDescription><![CDATA[ASISTIDO: tarjeta asistida
+LIBRE: tarjeta asistida pero libre]]></fieldDescription>
+	</field>
+	<field name="actividad" class="java.lang.String"/>
+	<field name="repartidor" class="java.lang.String"/>
+	<variable name="totalPagado" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{montoPagado}]]></variableExpression>
+	</variable>
+	<variable name="totalPorRepartidor" class="java.lang.Double" resetType="Group" resetGroup="porRepartidores" calculation="Sum">
+		<variableExpression><![CDATA[$F{montoPagado}]]></variableExpression>
+	</variable>
+	<variable name="totalTarjetas" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{numTarjeta}]]></variableExpression>
+	</variable>
+	<variable name="totalAsistidas" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{estado}=="ASISTIDO"]]></variableExpression>
+	</variable>
+	<group name="porRepartidores">
+		<groupExpression><![CDATA[$F{repartidor}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<staticText>
+					<reportElement uuid="73d5bfdb-3159-4844-b1bd-5b789a29bce0" x="188" y="0" width="60" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Repartidor]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="cb73a053-ce9d-4821-b741-94bb055511b1" x="248" y="0" width="187" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{repartidor}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="21">
+				<textField>
+					<reportElement uuid="c80f9ac0-7f66-441d-aefa-da7671e563de" x="199" y="1" width="72" height="19"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{totalPorRepartidor}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="574f8590-67b7-4589-a87f-ef0428626771" x="139" y="0" width="60" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total S/. ]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7d400b3a-e3ef-4670-ae02-64d8349b7d1b" x="129" y="10" width="300" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INFORME DE TODAS LAS TARJETAS]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="122392fd-a9ad-4cac-857a-1b4f8ec7ed84" x="129" y="30" width="300" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{actividad}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="38228cbe-972f-4e48-9287-dfa9e41c7ba4" x="0" y="1" width="39" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tarjeta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="54626b15-8092-4b6b-a67d-fb9ad5b00bd3" x="199" y="0" width="72" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monto pagado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="641cbde4-b558-4207-ae49-3a9eed6a9f6c" x="271" y="0" width="284" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c92beb2d-7a8f-4885-851e-5adeaf90aa74" x="139" y="1" width="60" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1f99eb43-6ca7-47be-abca-701f328e70c4" x="39" y="1" width="100" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Colaborador]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="19" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="99de5e13-bd49-4f2a-9e2a-9a2b7852dce5" x="0" y="0" width="39" height="19"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="3b4eacc8-3077-45cd-bb7e-33e544945b49" x="39" y="0" width="100" height="19"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="42b1c065-a1b5-4744-8d19-a97ccb181e37" x="139" y="0" width="60" height="19"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="55b8c08b-16b6-492d-be4c-a8cdd3111911" x="199" y="0" width="72" height="19"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="4d4684d6-3b1a-4c8f-b039-7baea77152dd" x="271" y="0" width="284" height="19"/>
+			</rectangle>
+			<textField>
+				<reportElement uuid="8fb2f359-2ba9-498d-a78a-faca3b084912" x="0" y="-1" width="39" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numTarjeta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="bd7442d7-6da4-4091-8d3e-3ccb9eda6f7d" x="199" y="-1" width="72" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{montoPagado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="39980cef-9704-4f23-a997-139c6a276f94" x="271" y="-1" width="284" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nota}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="42ff694b-b793-4ab3-9d70-2468070ba599" x="139" y="-1" width="60" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5d62d154-998d-42a2-aca2-804373930690" x="39" y="-1" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{colaborador}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="18" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement uuid="fcbac1dd-8f2d-45c6-9040-d61d4b3baad7" x="0" y="4" width="100" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="dd36feaf-1baf-40d1-ab28-709acbad6095" x="515" y="4" width="40" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6d936255-46e4-4661-9412-6bd40785244b" x="435" y="4" width="80" height="14"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="49">
+			<textField>
+				<reportElement uuid="9ff4adac-add0-49bc-ba32-74f959df8441" x="84" y="4" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{totalPagado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4544505a-b470-4138-8267-43054cd921c8" x="0" y="4" width="84" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total ventas S/.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4544505a-b470-4138-8267-43054cd921c8" x="0" y="24" width="84" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total tarjetas]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="39e7b996-2828-479b-a185-bfe5f23007dc" x="84" y="24" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{totalTarjetas}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
